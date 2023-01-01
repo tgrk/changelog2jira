@@ -1,6 +1,6 @@
 # changelog2jira
 
-Extracts JIRA IDs from CHANGELOG (using [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) with JIRA IDS e.g `feat(FOO-123): foobar`) and calls JIRA Webhook Automation rule. You can transition JIRA issue to the released state. 
+Extracts JIRA IDs from CHANGELOG (using [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) with JIRA IDS, e.g. `feat(FOO-123): foobar`) and calls JIRA Webhook Automation rule. You can transition the JIRA issue to the released state. 
 
 ![alt text](docs/images/changelog2jira_settings.png?raw=true "JIRA Automation Rule Settings")
 
