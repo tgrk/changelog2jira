@@ -19,7 +19,7 @@ jira_webhook_url = System.fetch_env!("JIRA_WEBHOOK_URL")
 
 # get CLI args
 case OptionParser.parse(System.argv(), strict: [version: :string, path: :string]) do
-  {[version: version, path: path], [], []} ->
+  {[path: path, version: version], [], []} ->
     case File.read(Path.join(path, "CHANGELOG.md")) do
       {:ok, markdown} ->
         {:ok, markdown_ast, []} = EarmarkParser.as_ast(markdown)
@@ -48,7 +48,13 @@ case OptionParser.parse(System.argv(), strict: [version: :string, path: :string]
             {"ul", [], children, %{}}, acc ->
               Enum.reduce(children, acc, fn
                 {"li", [], [{"strong", [], [jira_id], %{}} | _rest], %{}}, acc ->
-                  [jira_id |> String.replace(":", "") |> String.upcase() | acc]
+                  jira_id = jira_id |> String.replace(":", "") |> String.upcase()
+
+                  if String.contains?(jira_id, "-") do
+                    String.split(jira_id, ",") ++ acc
+                  else
+                    acc
+                  end
 
                 _other, acc ->
                   acc
@@ -91,9 +97,7 @@ case OptionParser.parse(System.argv(), strict: [version: :string, path: :string]
     end
 
   _other ->
-    IO.puts(
-      "Usage: elixir mark_released_jira_tickets.ex --path=<your_project_changelog> --version=latest"
-    )
+    IO.puts("Usage: elixir changelog2jira.ex --path=<your_project_changelog> --version=latest")
 
     System.stop(1)
 end
