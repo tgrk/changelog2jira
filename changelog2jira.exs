@@ -28,9 +28,18 @@ case OptionParser.parse(System.argv(), strict: [version: :string, path: :string]
         jira_ids =
           markdown_ast
           |> Enum.reduce_while({false, []}, fn
-            {"h" <> _, [], [{"a", [{"href", _compare_url}], [^version], %{}}, _date], %{}},
+            {"h" <> _, [], [{"a", [{"href", _compare_url}], [current_version], %{}}, _date], %{}},
             {false, acc} ->
-              {:cont, {true, acc}}
+              case version do
+                ^current_version ->
+                  {:cont, {true, acc}}
+
+                "latest" ->
+                  {:cont, {true, acc}}
+
+                _not_matching ->
+                  {:cont, {false, acc}}
+              end
 
             {"h" <> _, [], [{"a", [{"href", _compare_url}], [_other_version], %{}}, _date], %{}},
             {true, acc} ->
@@ -98,6 +107,5 @@ case OptionParser.parse(System.argv(), strict: [version: :string, path: :string]
 
   _other ->
     IO.puts("Usage: elixir changelog2jira.ex --path=<your_project_changelog> --version=latest")
-
     System.stop(1)
 end
