@@ -21,5 +21,5 @@ ENV variables:
  - `JIRA_WEBHOOK_URL` - your JIRA Automation rule Webhook URI
 
 CLI arguments:
- - `version` - the version you want to extract JIRA IDs
+ - `version` - the version you want to extract JIRA IDs e.g ``1.0.1`` or ``latest``
  - `path` - location of your project that includes CHANGELOG.md
